@@ -2,24 +2,26 @@ version: '3'
 services:
   mysql_master:
     image: mysql:8.0
+    container_name: "mysql_master"
+    hostname: "mysql_master"
+    restart: "unless-stopped"
+    ports:
+      - "4306:3306"
     env_file:
       - ./master/mysql.env
-    container_name: "mysql_master"
-    restart: "no"
-    ports:
-      - 4406:3306
     volumes:
       - ./master/conf/mysql.conf.cnf:/etc/mysql/conf.d/mysql.conf.cnf
       - ./master/data:/var/lib/mysql
 
   mysql_slave1:
     image: mysql:8.0
+    container_name: "mysql_slave1"
+    hostname: "mysql_slave1"
+    restart: "unless-stopped"
+    ports:
+      - 5306:3306
     env_file:
       - ./slave1/mysql.env
-    container_name: "mysql_slave1"
-    restart: "no"
-    ports:
-      - 5506:3306
     depends_on:
       - mysql_master
     volumes:
@@ -28,12 +30,13 @@ services:
 
   mysql_slave2:
     image: mysql:8.0
+    container_name: "mysql_slave2"
+    hostname: "mysql_slave2"
+    restart: "unless-stopped"
+    ports:
+      - 6306:3306
     env_file:
       - ./slave2/mysql.env
-    container_name: "mysql_slave2"
-    restart: "no"
-    ports:
-      - 6506:3306
     depends_on:
       - mysql_master
     volumes:
